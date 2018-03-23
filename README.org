@@ -1,0 +1,18 @@
+* Checkprint library
+A library to simplify making PDFs that can be printed onto pre-printed
+checks for an accounting system.
+** Early software
+This software works with one type of Quickbooks compatible check and
+is not yet full featured.
+** Prerequisites
+Requires fpdf2.  pip install fpdf2
+
+Requires my modification of the num2words library.  
+https://github.com/veterinarian/num2words.git
+** Usage - to be determined. For now you can 
+import checkprint
+
+pdf = checkprint.makepdf(payee,amount,date,[memo])
+# date should be a string like "3/13/2017"
+pdf.output('output.pdf', 'F')
+
