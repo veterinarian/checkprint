@@ -5,10 +5,11 @@ checks for an accounting system.
 This software works with one type of Quickbooks compatible check and
 is not yet full featured.
 ** Prerequisites
-Requires fpdf2.  pip install fpdf2
+Requires fpdf2.  =pip install fpdf2=
 
 Requires my modification of the num2words library.  
 https://github.com/veterinarian/num2words.git
+
 ** Usage 
 To be determined. For now you can:
 #+NAME: checkprint_doc
@@ -51,3 +52,9 @@ pdf.output('output.pdf', 'F')
 
 #+END_SRC
 
+** Command-line usage
+#+NAME: checkprint_doc
+#+BEGIN_SRC sh
+python checkprint.py Veterinarian 2133.43 12/3/2017 Surgery \
+    "Veterinary Clinic" "ATTN: Receptionist" "123 Main St" "Anywhere, US 99999"
+#+END_SRC

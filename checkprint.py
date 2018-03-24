@@ -1,6 +1,5 @@
 from fpdf import FPDF #pip install fpdf2
 from num2words import num2words
-import argparse
 
 #Quickbooks Check
 check_measurements = {
@@ -81,15 +80,44 @@ normal_font and small_font, and using the capitalization function.
 
     am = check_measurements['address']
     pdf.set_xy(am['x'],am['y'])
-    for txt in alines[:4]:
+    for txt in alines:
         pdf.cell(am['w'], am['h'], txt, ln=2)
 
     return pdf
 
 if __name__ == '__main__':
-    print(set_fonts({'face': 'Courier','size':11},{'face': 'Courier','size':9}))
-    pdf = makepdf("John Duncan", 12315.33, "12/31/2017",
-                  address='John Duncan\n2017 Foo St\nSuite 138\nAtlanta, GA 30313',
-                  memo='This is a very long comment about what you may have bought.')
-    
-    pdf.output('check1.pdf', 'F')
+    import argparse
+    import datetime
+
+    parser = argparse.ArgumentParser(description="Create a PDF file that " +
+                                     "fills in a pre-printed check.",
+                                     formatter_class=argparse.RawTextHelpFormatter,
+                                     epilog='''
+Example: 
+
+python checkprint.py Veterinarian 2133.43 12/23/2017 Surgery 
+    "Veterinary Clinic" "ATTN: Receptionist" "123 Main St" "Anywhere, US 99999"
+''')
+    today = datetime.date.today().strftime('%m/%d/%Y')
+    parser.add_argument('payee', help="Payee name as string.")
+    parser.add_argument('amount', type=float, help="Amount as decimal.")
+    parser.add_argument('date',nargs='?', default=today,
+                        help='Any string.  Default "today", currently '
+                        + today + '.')
+    parser.add_argument('memo',nargs='?', default='',
+                        help="Any string for the memo line.")
+    parser.add_argument('address',nargs='*', 
+                        help="Lines for the address window.")
+    parser.add_argument('-o', '--output', metavar='FILE',
+                        help='Output to FILE instead of stdout')
+    args = parser.parse_args()
+    print(args)
+    d = args.date.lower()
+    if d == 'today':
+        args.date = today
+    address = '\n'.join(args.address)
+    pdf = makepdf(args.payee,args.amount,args.date,args.memo,address)
+    if args.output:
+        pdf.output(args.output,'F')
+    else:
+        pdf.output()
