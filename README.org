@@ -54,7 +54,25 @@ pdf.output('output.pdf', 'F')
 
 ** Command-line usage
 #+NAME: checkprint_doc
-#+BEGIN_SRC sh
+#+BEGIN_SRC
 python checkprint.py -o output.pdf Veterinarian 2133.43 12/3/2017 Surgery \
     "Veterinary Clinic" "ATTN: Receptionist" "123 Main St" "Anywhere, US 99999"
+
+usage: checkprint.py [-h] [-o FILE]
+                     payee amount [date] [memo] [address [address ...]]
+
+Create a PDF file that fills in a pre-printed check.
+
+positional arguments:
+  payee                 Payee name as string.
+  amount                Amount as decimal.
+  date                  Any string.  Default "today", currently 03/24/2018.
+  memo                  Any string for the memo line.
+  address               Lines for the address window.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o FILE, --output FILE
+                        Output to FILE instead of stdout
+
 #+END_SRC
