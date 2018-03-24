@@ -1,5 +1,6 @@
 from fpdf import FPDF #pip install fpdf2
 from num2words import num2words
+import argparse
 
 #Quickbooks Check
 check_measurements = {
@@ -16,7 +17,34 @@ small_font = { 'face': 'Helvetica', 'size': 10 }
 
 capitalization=str.capitalize
 
+def set_measurements(m):
+    """Sets check measurements to m, returns the old measurements"""
+    global check_measurements
+    old = check_measurements
+    check_measurements = m
+    return old
+
+def set_fonts(normal,small):
+    """Sets fonts to normal and small, returns the old fonts as a tuple"""
+    global normal_font, small_font
+    old = (normal_font, small_font)
+    normal_font, small_font = normal, small
+    return old
+    
+def set_capitalization(f):
+    """sets capitalization to the function f, returns the old function"""
+    global capitalization
+    old = capitalization
+    capitaliztion = f
+    return old
+    
 def makepdf(payee,amount,date,memo='',address=''):
+    """Return an FPDF object that fills out a pre-printed check.
+
+Output is based on the measurements in the check_measurements global,
+normal_font and small_font, and using the capitalization function.
+"""
+
     def mkcell(m, txt, extend=False, ch='-'):
         pdf.set_xy(m['x'], m['y'])
         tw = pdf.get_string_width(txt)
@@ -59,6 +87,7 @@ def makepdf(payee,amount,date,memo='',address=''):
     return pdf
 
 if __name__ == '__main__':
+    print(set_fonts({'face': 'Courier','size':11},{'face': 'Courier','size':9}))
     pdf = makepdf("John Duncan", 12315.33, "12/31/2017",
                   address='John Duncan\n2017 Foo St\nSuite 138\nAtlanta, GA 30313',
                   memo='This is a very long comment about what you may have bought.')
