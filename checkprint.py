@@ -7,7 +7,14 @@ check_measurements = {
     'payee' : { 'x': 1.25, 'y': 1.2, 'w': 5.5, 'h': 0.25 },
     'numeric_amount' : { 'x': 6.875, 'y': 1.2 , 'w': 1.125, 'h': 0.25 },
     'text_amount' : { 'x': 0.375, 'y': 1.575, 'w': 7.125, 'h': 0.25 },
-    'memo' : { 'x': 0.875, 'y': 2.75, 'w': 2, 'h': 0.25 }}
+    'memo' : { 'x': 0.875, 'y': 2.75, 'w': 2, 'h': 0.25 },
+    'address': { 'x': 0.375, 'y': 2, 'w': 4, 'h': 0.15 } # h = line leading
+}
+
+normal_font = { 'face': 'Helvetica', 'size': 12 }
+small_font = { 'face': 'Helvetica', 'size': 10 }
+
+capitalization=str.capitalize
 
 def makepdf(payee,amount,date,memo='',address=''):
     def mkcell(m, txt, extend=False, ch='-'):
@@ -23,27 +30,37 @@ def makepdf(payee,amount,date,memo='',address=''):
         pdf.cell(m['w'], m['h'], txt)
         pdf.set_stretching(100.0)
 
+    def small():
+        pdf.set_font(small_font['face'], size=small_font['size'])
+        
+    def normal():
+        pdf.set_font(normal_font['face'], size=normal_font['size'])
+        
     pdf = FPDF(orientation = 'P', unit = 'in', format='Letter')
     pdf.add_page()
-    pdf.set_font('Courier', size=12)
+    normal()
     pdf.set_margins(0,0,0)
     mkcell(check_measurements['date'], date)
     mkcell(check_measurements['payee'], payee)
     mkcell(check_measurements['numeric_amount'], '{:,}'.format(amount))
     mkcell(check_measurements['text_amount'],
-           num2words(amount, to='check').upper(),True)
-    pdf.set_font('Courier', size=10)
+           capitalization(num2words(amount, to='check')),True)
+    small()
     mkcell(check_measurements['memo'], memo)
 
-    pdf.set_font('Courier', size=10)
-    pdf.set_xy(0.375, 2)
-    pdf.cell(4, 0.15, 'AVLC Admin', ln=2)
-    pdf.cell(4, 0.15, txt='123 Any Street', ln=2)
-    pdf.cell(4, 0.15, txt='Suite 300', ln=2)
-    pdf.cell(4, 0.15, txt='Nowhere, TX 13313-1315')
+    small()
+    alines = address.split('\n')
+
+    am = check_measurements['address']
+    pdf.set_xy(am['x'],am['y'])
+    for txt in alines[:4]:
+        pdf.cell(am['w'], am['h'], txt, ln=2)
 
     return pdf
 
 if __name__ == '__main__':
-    pdf = makepdf("John Duncan", 12315.33, "12/31/2017")
+    pdf = makepdf("John Duncan", 12315.33, "12/31/2017",
+                  address='John Duncan\n2017 Foo St\nSuite 138\nAtlanta, GA 30313',
+                  memo='This is a very long comment about what you may have bought.')
+    
     pdf.output('check1.pdf', 'F')
