@@ -9,7 +9,8 @@ Requires fpdf2.  pip install fpdf2
 
 Requires my modification of the num2words library.  
 https://github.com/veterinarian/num2words.git
-** Usage - to be determined. For now you can 
+** Usage 
+To be determined. For now you can:
 #+NAME: checkprint_doc
 #+BEGIN_SRC python
 import checkprint
@@ -20,8 +21,11 @@ pdf = checkprint.makepdf(payee,amount,date,[memo],[address])
 # date should be a string, e.g., "3/13/2017".  The actual format does not matter.
 # memo is a string
 # address should be up to 4 lines of newline-separated text
+#+END_SRC
 
-# Example:
+** Example
+#+NAME: checkprint_doc
+#+BEGIN_SRC python
 
 # optional, default is Helvetica.  You can use Courier, Helvetica or Times.
 checkprint.set_fonts({'face': 'Courier','size': 11},{'face': 'Courier','size': 9})
