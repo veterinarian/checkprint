@@ -10,9 +10,40 @@ Requires fpdf2.  pip install fpdf2
 Requires my modification of the num2words library.  
 https://github.com/veterinarian/num2words.git
 ** Usage - to be determined. For now you can 
+#+NAME: checkprint_doc
+#+BEGIN_SRC python
 import checkprint
 
-pdf = checkprint.makepdf(payee,amount,date,[memo])
-# date should be a string like "3/13/2017"
+pdf = checkprint.makepdf(payee,amount,date,[memo],[address])
+# payee is a string
+# amount is a float, Decimal may work too
+# date should be a string, e.g., "3/13/2017".  The actual format does not matter.
+# memo is a string
+# address should be up to 4 lines of newline-separated text
+
+# Example:
+
+# optional, default is Helvetica.  You can use Courier, Helvetica or Times.
+checkprint.set_fonts({'face': 'Courier','size': 11},{'face': 'Courier','size': 9})
+
+# optional, these are the default measurements, which match a Quickbooks compatible
+# voucher check.
+checkprint.set_measurements({
+    'date' : { 'x': 6.875, 'y': 0.75, 'w': 1.125, 'h': 0.25 },
+    'payee' : { 'x': 1.25, 'y': 1.2, 'w': 5.5, 'h': 0.25 },
+    'numeric_amount' : { 'x': 6.875, 'y': 1.2 , 'w': 1.125, 'h': 0.25 },
+    'text_amount' : { 'x': 0.375, 'y': 1.575, 'w': 7.125, 'h': 0.25 },
+    'memo' : { 'x': 0.875, 'y': 2.75, 'w': 2, 'h': 0.25 },
+    'address': { 'x': 0.375, 'y': 2, 'w': 4, 'h': 0.15 } # h = line leading
+})
+
+# optional, default is str.capitalize
+checkprint.set_capitalization(str.upper)
+
+pdf = checkprint.makepdf('Veterinarian',2133.43,'Dec 12, 2017','Surgery',
+    'Veterinary Clinic\nATTN: Receptionist\n123 Main St\nAnywhere, US 99999')
+
 pdf.output('output.pdf', 'F')
+
+#+END_SRC
 
