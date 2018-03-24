@@ -55,6 +55,6 @@ pdf.output('output.pdf', 'F')
 ** Command-line usage
 #+NAME: checkprint_doc
 #+BEGIN_SRC sh
-python checkprint.py Veterinarian 2133.43 12/3/2017 Surgery \
+python checkprint.py -o output.pdf Veterinarian 2133.43 12/3/2017 Surgery \
     "Veterinary Clinic" "ATTN: Receptionist" "123 Main St" "Anywhere, US 99999"
 #+END_SRC
