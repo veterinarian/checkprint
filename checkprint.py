@@ -69,7 +69,7 @@ normal_font and small_font, and using the capitalization function.
     pdf.set_margins(0,0,0)
     mkcell(check_measurements['date'], date)
     mkcell(check_measurements['payee'], payee)
-    mkcell(check_measurements['numeric_amount'], '{:,}'.format(amount))
+    mkcell(check_measurements['numeric_amount'], '{:,.2f}'.format(amount))
     mkcell(check_measurements['text_amount'],
            capitalization(num2words(amount, to='check')),True)
     small()
